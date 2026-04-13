@@ -1,0 +1,35 @@
+name: Deploy via SSH
+
+on:
+  workflow_dispatch:  # Manual trigger only, do NOT deploy on push
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd ~/RAG-impl || mkdir -p ~/RAG-impl
+            # Optional: git clone if the folder is empty
+            if [ ! -d ".git" ]; then
+              git clone git@github.com:yaffalhakim1/RAG-impl.git .
+            fi
+            
+            git fetch origin main
+            git reset --hard origin/main
+            
+            # Ensure .env exists 
+            echo "GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}" > .env
+            
+            # Restart docker containers
+            docker compose down
+            docker compose up -d --build

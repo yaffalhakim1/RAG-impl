@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+markitdown[pdf,docx,pptx]
+lancedb
+google-generativeai
+python-multipart
+python-dotenv
+pydantic-settings
+pyarrow
+fastembed

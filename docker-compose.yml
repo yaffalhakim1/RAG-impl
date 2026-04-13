@@ -1,0 +1,28 @@
+services:
+  client:
+    build: 
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "5173:80"
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+    environment:
+      - VITE_API_URL=http://localhost:8080
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    deploy:
+      resources:
+        limits:
+          memory: 768M
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+    volumes:
+      - ./server/data:/app/data
