@@ -23,3 +23,8 @@ skills-lock.json
 # OS files
 .DS_Store
 Thumbs.db
+
+# Markdown
+*.md
+!README.md
+!readme.md
